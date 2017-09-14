@@ -162,5 +162,5 @@ func main() {
 
 	processed := process(file, queue)
 	aggregated := aggregate(processed)
-	save(aggregated, "output.csv")
+	save(aggregated, strings.Split(*file, ".")[0] + ".csv")
 }
