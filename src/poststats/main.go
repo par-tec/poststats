@@ -154,7 +154,7 @@ func save(stats map[time.Time]Stats, output string, appendfile bool) {
 	var err error
 
 	if appendfile {
-		file, err = os.OpenFile("access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		file, err = os.OpenFile(output, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	} else {
 		file, err = os.Create(output)
 	}
