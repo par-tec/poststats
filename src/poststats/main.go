@@ -51,7 +51,7 @@ func aggregate(mails []Mails) map[time.Time]Stats {
 	return result
 }
 
-func parse(line, queue string) Mails {
+func parse(year int, line, queue string) Mails {
 	var err error
 
 	output := Mails{}
@@ -64,6 +64,7 @@ func parse(line, queue string) Mails {
 		if err != nil {
 			panic(err)
 		}
+		output.Date.AddDate(year-output.Date.Year(), 0, 0)
 
 		parseline := line[strings.Index(line, ": ")+2:]
 		split1 := strings.Split(parseline, ": ")
@@ -92,6 +93,22 @@ func parse(line, queue string) Mails {
 	return output
 }
 
+func getyear(filename string) int {
+	split := strings.Split(filename, "-")
+	if len(split) < 2 {
+		result := time.Now().Year()
+		return result
+	} else {
+		layout := "20060102"
+		date := strings.Split(split[1], ".")[0]
+		result, err := time.Parse(layout, date)
+		if err != nil {
+			panic(err)
+		}
+		return result.Year()
+	}
+}
+
 func process(filename, queue *string) []Mails {
 	var result []Mails
 	var scanner *bufio.Scanner
@@ -114,10 +131,12 @@ func process(filename, queue *string) []Mails {
 		scanner = bufio.NewScanner(file)
 	}
 
+	year := getyear(*filename)
+
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		processed := parse(line, *queue)
+		processed := parse(year, line, *queue)
 		if processed.MailID != "" {
 			result = append(result, processed)
 		}
