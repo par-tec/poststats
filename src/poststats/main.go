@@ -64,7 +64,7 @@ func parse(year int, line, queue string) Mails {
 		if err != nil {
 			panic(err)
 		}
-		output.Date.AddDate(year-output.Date.Year(), 0, 0)
+		output.Date = output.Date.AddDate(year-output.Date.Year(), 0, 0)
 
 		parseline := line[strings.Index(line, ": ")+2:]
 		split1 := strings.Split(parseline, ": ")
