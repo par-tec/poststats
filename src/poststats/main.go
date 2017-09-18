@@ -130,8 +130,16 @@ func process(filename, queue *string) []Mails {
 	return result
 }
 
-func save(stats map[time.Time]Stats, output string) {
-	file, err := os.Create(output)
+func save(stats map[time.Time]Stats, output string, appendfile bool) {
+	var file *os.File
+	var err error
+
+	if appendfile {
+		file, err = os.OpenFile("access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	} else {
+		file, err = os.Create(output)
+	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -157,11 +165,12 @@ func main() {
 	queue := kingpin.Arg("queue", "Queue to process").Required().String()
 	file := kingpin.Arg("filename", "Logfile to process").Required().String()
 	output := kingpin.Flag("output", "Set the csv file to save data").Short('O').Default("output.csv").String()
+	appendfile := kingpin.Flag("appendfile", "Append to existent csv").Short('A').Bool()
 
 	kingpin.Version(VERSION)
 	kingpin.Parse()
 
 	processed := process(file, queue)
 	aggregated := aggregate(processed)
-	save(aggregated, *output)
+	save(aggregated, *output, *appendfile)
 }
