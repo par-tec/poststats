@@ -156,11 +156,12 @@ func save(stats map[time.Time]Stats, output string) {
 func main() {
 	queue := kingpin.Arg("queue", "Queue to process").Required().String()
 	file := kingpin.Arg("filename", "Logfile to process").Required().String()
+	output := kingpin.Flag("output", "Set the csv file to save data").Short('O').Default("output.csv").String()
 
 	kingpin.Version(VERSION)
 	kingpin.Parse()
 
 	processed := process(file, queue)
 	aggregated := aggregate(processed)
-	save(aggregated, strings.Split(*file, ".")[0] + ".csv")
+	save(aggregated, *output)
 }
