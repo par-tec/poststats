@@ -60,7 +60,8 @@ func parse(year int, line, queue string) Mails {
 
 	if strings.Contains(line, strings.Join([]string{queue, "/qmgr"}, "")) &&
 		!(strings.Contains(line, "removed") ||
-			(strings.Contains(line, "status=expired")) ||
+			strings.Contains(line, "warning: ") ||
+			strings.Contains(line, "status=expired") ||
 			strings.Contains(line, "skipped")) {
 		date := line[:15]
 		output.Date, err = time.Parse(layout, date)
