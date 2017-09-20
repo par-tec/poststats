@@ -86,7 +86,7 @@ func parse(year int, line, queue string) Mails {
 
 		output.Size, err = strconv.Atoi(size)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err, "\n\t", line)
 		}
 	}
 
