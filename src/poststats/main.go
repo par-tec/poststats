@@ -63,25 +63,25 @@ func parse(year int, line, queue string) Mails {
 		date := line[:15]
 		output.Date, err = time.Parse(layout, date)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err, "\n\t", line)
 		}
 		output.Date = output.Date.AddDate(year-output.Date.Year(), 0, 0)
 
 		parseline := line[strings.Index(line, ": ")+2:]
 		split1 := strings.Split(parseline, ": ")
 		if len(split1) < 2 {
-			log.Fatal("Malformed line: " + line)
+			log.Fatal("Malformed line: "+line, "\n\t", line)
 		}
 		output.MailID = split1[0]
 
 		split2 := strings.Split(split1[1], ",")
 		if len(split2) < 3 {
-			log.Fatal("Not enough values: " + strings.Join(split2, ","))
+			log.Fatal("Not enough values: "+strings.Join(split2, ","), "\n\t", line)
 		}
 
 		index := strings.Index(split2[1], "=") + 1
 		if index == -1 {
-			log.Fatal("Malformed line: " + split2[1])
+			log.Fatal("Malformed line: "+split2[1], "\n\t", line)
 		}
 		size := split2[1][index:]
 
