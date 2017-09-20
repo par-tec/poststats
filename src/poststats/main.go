@@ -62,31 +62,31 @@ func parse(year int, line, queue string) Mails {
 		date := line[:15]
 		output.Date, err = time.Parse(layout, date)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		output.Date = output.Date.AddDate(year-output.Date.Year(), 0, 0)
 
 		parseline := line[strings.Index(line, ": ")+2:]
 		split1 := strings.Split(parseline, ": ")
 		if len(split1) < 2 {
-			panic("Malformed line: " + line)
+			log.Fatal("Malformed line: " + line)
 		}
 		output.MailID = split1[0]
 
 		split2 := strings.Split(split1[1], ",")
 		if len(split2) < 3 {
-			panic("Not enough values: " + strings.Join(split2, ","))
+			log.Fatal("Not enough values: " + strings.Join(split2, ","))
 		}
 
 		index := strings.Index(split2[1], "=") + 1
 		if index == -1 {
-			panic("Malformed line: " + split2[1])
+			log.Fatal("Malformed line: " + split2[1])
 		}
 		size := split2[1][index:]
 
 		output.Size, err = strconv.Atoi(size)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}
 
@@ -103,7 +103,7 @@ func getyear(filename string) int {
 		date := strings.Split(split[1], ".")[0]
 		result, err := time.Parse(layout, date)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		return result.Year()
 	}
@@ -160,7 +160,7 @@ func save(stats map[time.Time]Stats, output string, appendfile bool) {
 	}
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer file.Close()
 
@@ -174,7 +174,7 @@ func save(stats map[time.Time]Stats, output string, appendfile bool) {
 		})
 
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		writer.Flush()
 	}
