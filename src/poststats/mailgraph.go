@@ -8,6 +8,10 @@ package main
 
 import (
 	"encoding/csv"
+	"gonum.org/v1/plot"
+	"gonum.org/v1/plot/plotter"
+	"gonum.org/v1/plot/plotutil"
+	"gonum.org/v1/plot/vg"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io"
 	"log"
@@ -75,7 +79,27 @@ func read(input string) []Data {
 }
 
 func write(generate, output string, data []Data) {
-	// TODO: write result data to graph
+	p, err := plot.New()
+	if err != nil {
+		panic(err)
+	}
+
+	p.Title.Text = "Mail statistics"
+	p.X.Label.Text = "Date"
+	p.Y.Label.Text = generate
+
+	if err = plotutil.AddLinePoints(p, getpoints(data, generate)); err != nil {
+		log.Fatal(err)
+	}
+	if err := p.Save(4*vg.Inch, 4*vg.Inch, "points.png"); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func getpoints(data []Data, generate string) plotter.XYs {
+	var result plotter.XYs
+	// TODO: return points
+	return result
 }
 
 func main() {
