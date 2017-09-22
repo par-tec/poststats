@@ -97,9 +97,18 @@ func write(generate, output string, data []Data) {
 }
 
 func getpoints(data []Data, generate string) plotter.XYs {
-	var result plotter.XYs
-	// TODO: return points
-	return result
+	pts := make(plotter.XYs, len(data))
+
+	for i := range pts {
+		pts[i].X = float64(data[i].Date.Unix())
+		if generate == COUNTSTAT {
+			pts[i].Y = float64(data[i].Count)
+		} else {
+			pts[i].Y = float64(data[i].Size)
+		}
+	}
+
+	return pts
 }
 
 func main() {
