@@ -9,15 +9,25 @@ package main
 import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"log"
+	"time"
 )
 
 const VERSION = "0.0.1"
 
-func read(input string) {
-	// TODO read file and return result
+type Data struct {
+	Date  *time.Time
+	Count int
+	Size  int
 }
 
-func write(output string) {
+func read(input string) []Data {
+	var result []Data
+
+	// TODO read file and return result
+	return result
+}
+
+func write(output string, data []Data) {
 	// TODO: write result data to graph
 }
 
@@ -30,6 +40,6 @@ func main() {
 	kingpin.Version(VERSION)
 	kingpin.Parse()
 
-	read(*input)
-	write(*output)
+	data := read(*input)
+	write(*output, data)
 }
