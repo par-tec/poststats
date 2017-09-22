@@ -17,6 +17,8 @@ import (
 )
 
 const VERSION = "0.0.1"
+const SIZESTAT = "Size"
+const COUNTSTAT = "Count"
 
 type Data struct {
 	Date  time.Time
@@ -72,19 +74,35 @@ func read(input string) []Data {
 	return result
 }
 
-func write(output string, data []Data) {
+func write(generate, output string, data []Data) {
 	// TODO: write result data to graph
 }
 
 func main() {
+	var generate string
+
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	input := kingpin.Arg("input", "CSV file to graph").Required().String()
 	output := kingpin.Arg("output", "PNG file to save result").Required().String()
+	size := kingpin.Flag("size", "Generate graphic for size statistics").Short('S').Bool()
+	count := kingpin.Flag("count", "Generate graphic for count statistics").Short('C').Bool()
 
 	kingpin.Version(VERSION)
 	kingpin.Parse()
 
+	if *size && *count {
+		kingpin.FatalUsage("Cannot generate graphic for size and count statistics in the same time")
+	}
+
+	if *size {
+		generate = SIZESTAT
+	} else if *count {
+		generate = COUNTSTAT
+	} else {
+		kingpin.FatalUsage("Specify count or size grap statistics")
+	}
+
 	data := read(*input)
-	write(*output, data)
+	write(generate, *output, data)
 }
