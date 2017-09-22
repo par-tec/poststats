@@ -1,6 +1,6 @@
 /*
-	Name: poststats
-	Description: A postfix log statistics tool
+	Name: mailtocsv
+	Description: A mail log to csv paresr
 	Author: Enrico Bianchi
 */
 
