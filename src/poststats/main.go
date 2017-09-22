@@ -13,10 +13,13 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
+
+const VERSION = "0.0.1"
 
 type Mails struct {
 	MailID string
@@ -29,7 +32,11 @@ type Stats struct {
 	Counted int
 }
 
-const VERSION = "0.0.1"
+type EpochDate []time.Time
+
+func (a EpochDate) Len() int           { return len(a) }
+func (a EpochDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a EpochDate) Less(i, j int) bool { return a[i].Unix() < a[j].Unix() }
 
 func aggregate(mails []Mails) map[time.Time]Stats {
 	result := make(map[time.Time]Stats)
@@ -168,13 +175,18 @@ func save(stats map[time.Time]Stats, output string, appendfile bool) {
 	}
 	defer file.Close()
 
-	writer := csv.NewWriter(file)
+	var keys EpochDate
+	for k, _ := range stats {
+		keys = append(keys, k)
+	}
+	sort.Sort(keys)
 
-	for key, value := range stats {
+	writer := csv.NewWriter(file)
+	for _, key := range keys {
 		err := writer.Write([]string{
 			key.String(),
-			strconv.Itoa(value.Counted),
-			strconv.Itoa(value.Size),
+			strconv.Itoa(stats[key].Counted),
+			strconv.Itoa(stats[key].Size),
 		})
 
 		if err != nil {
