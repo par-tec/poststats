@@ -78,7 +78,7 @@ func read(input string) []Data {
 	return result
 }
 
-func write(generate, output string, data []Data) {
+func write(generate, output string, data []Data, width, height int) {
 	p, err := plot.New()
 	if err != nil {
 		panic(err)
@@ -92,7 +92,10 @@ func write(generate, output string, data []Data) {
 		log.Fatal(err)
 	}
 
-	if err := p.Save(4*vg.Centimeter, 4*vg.Centimeter, output); err != nil {
+	sizew := vg.Length(width) * vg.Centimeter
+	sizeh := vg.Length(height) * vg.Centimeter
+
+	if err := p.Save(sizew, sizeh, output); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -121,6 +124,8 @@ func main() {
 	output := kingpin.Arg("output", "PNG file to save result").Required().String()
 	size := kingpin.Flag("size", "Generate graphic for size statistics").Short('S').Bool()
 	count := kingpin.Flag("count", "Generate graphic for count statistics").Short('C').Bool()
+	width := kingpin.Flag("width", "Set width (in centimeters) for the graph").Short('W').Default("60").Int()
+	height := kingpin.Flag("height", "Set heigth (in centimeters) for the graph").Short('H').Default("60").Int()
 
 	kingpin.Version(VERSION)
 	kingpin.Parse()
@@ -138,5 +143,5 @@ func main() {
 	}
 
 	data := read(*input)
-	write(generate, *output, data)
+	write(generate, *output, data, *width, *height)
 }
