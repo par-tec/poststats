@@ -91,7 +91,8 @@ func write(generate, output string, data []Data) {
 	if err = plotutil.AddLinePoints(p, getpoints(data, generate)); err != nil {
 		log.Fatal(err)
 	}
-	if err := p.Save(4*vg.Inch, 4*vg.Inch, "points.png"); err != nil {
+
+	if err := p.Save(4*vg.Centimeter, 4*vg.Centimeter, output); err != nil {
 		log.Fatal(err)
 	}
 }
