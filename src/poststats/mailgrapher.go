@@ -1,5 +1,5 @@
 /*
-	Name: mailgraph
+	Name: mailgrapher
 	Description: A mail grapher from csv file
 	Author: Enrico Bianchi
 */
@@ -84,8 +84,11 @@ func write(generate, output string, data []Data, width, height int) {
 		panic(err)
 	}
 
+	xticks := plot.TimeTicks{Format: "2006-01-02 15:04:05"}
+
 	p.Title.Text = "Mail statistics"
 	p.X.Label.Text = "Date"
+	p.X.Tick.Marker = xticks
 	p.Y.Label.Text = generate
 
 	if err = plotutil.AddLinePoints(p, getpoints(data, generate)); err != nil {
