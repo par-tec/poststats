@@ -128,7 +128,7 @@ func main() {
 	size := kingpin.Flag("size", "Generate graphic for size statistics").Short('S').Bool()
 	count := kingpin.Flag("count", "Generate graphic for count statistics").Short('C').Bool()
 	width := kingpin.Flag("width", "Set width (in centimeters) for the graph").Short('W').Default("60").Int()
-	height := kingpin.Flag("height", "Set heigth (in centimeters) for the graph").Short('H').Default("60").Int()
+	height := kingpin.Flag("height", "Set height (in centimeters) for the graph").Short('H').Default("60").Int()
 
 	kingpin.Version(VERSION)
 	kingpin.Parse()
